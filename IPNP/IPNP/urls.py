@@ -19,5 +19,5 @@ from PortalApp.views import index_page
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('index/', index_page),
+    path('', index_page),
 ]
