@@ -1,0 +1,16 @@
+Заходим в Django Shell: python manage.py shell 
+*для выхода вводим exit()
+
+1. Создать двух пользователей
+	*уже создынный суперюзер: admin, 0000
+>>> from django.contrib.auth.models import User									# импортируем User
+>>> User.objects.create_user('Semen', 'sema@gmail.com', '0000') 				# создаём двух пользователей
+>>> User.objects.create_user('Vlad', '', '0000') 
+							(username, email, password)							# <-- атрибуты при создании пользователя
+							
+2. Создать два объекта модели Author, связанные с пользователями
+>>> from PortalApp.models import Author											# импортируем Author 
+>>> from django.contrib.auth.models import User    								# импортируем User
+>>> Author.objects.create(user=User.objects.get(username='Vlad'))				# создаём объекты модели Author связанные с User
+>>> Author.objects.create(user=User.objects.get(username='Semen'))				# 
+

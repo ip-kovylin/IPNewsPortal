@@ -4,8 +4,13 @@ from PortalApp.resources import PostType, news
 
 
 class Author(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField('auth.User', on_delete=models.CASCADE, unique=True)
     rating = models.IntegerField(default=0)
+
+    # def upgrade_rating(self):
+    #     self.rating = Post.object.filter(Post.author.user == self.user)
+    #
+    #     self.save()
 
 
 class Category(models.Model):
@@ -21,6 +26,17 @@ class Post(models.Model):
     text = models.TextField()
     rating = models.IntegerField(default=0)
 
+    def like(self):
+        self.rating += 1
+        self.save()
+
+    def dislike(self):
+        self.rating -= 1
+        self.save()
+
+    def preview(self):
+        return f'{self.text[:124]}...'
+
 
 class PostCategory(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
@@ -33,3 +49,11 @@ class Comment(models.Model):
     text = models.TextField(max_length=1000)
     date_time = models.DateTimeField(auto_now_add=True)
     rating = models.IntegerField(default=0)
+
+    def like(self):
+        self.rating += 1
+        self.save()
+
+    def dislike(self):
+        self.rating -= 1
+        self.save()
