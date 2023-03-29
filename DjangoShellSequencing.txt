@@ -14,3 +14,91 @@
 >>> Author.objects.create(user=User.objects.get(username='Vlad'))				# создаём объекты модели Author связанные с User
 >>> Author.objects.create(user=User.objects.get(username='Semen'))				# 
 
+3. Добавить 4 категории в модель Category
+>>> from PortalApp.models import Category
+>>> Category.objects.create(category_name='Спорт')
+>>> Category.objects.create(category_name='Политика')
+>>> Category.objects.bulk_create([
+		Category(category_name='Экономика'),
+		Category(category_name='Интернет'),
+	])
+
+4. Добавить 2 статьи и 1 новость.
+>>> from PortalApp.models import *
+>>> from PortalApp.resources import *
+>>> Post.objects.create(
+        author=Author.objects.get(pk=1),
+        post_type=news,
+        headline='Главное о первых турах отбора на Евро. Кто неожиданно стал героем, а кто подарил сенсацию?',
+        text='''Группа A. В первой по алфавиту группе лидерство неожиданно захватила сборная Шотландии. Команда Стива
+            Кларка одержала две победы в Глазго – сначала разгромила Грузию (3:0), а потом сенсационно переиграла
+            Испанию (2:0). Героем старта квалификации стал полузащитник «Манчестер Юнайтед» Скотт Мактоминей.
+            В центрхаве вдруг проснулся бомбардир: Мактоминей сделал дубли в обоих матчах.'''
+    )
+>>> Post.objects.create(
+        author=Author.objects.get(pk=2),
+        post_type=article,
+        headline='В Парагвае открыли новый вид змей, отличающийся редкостной красотой',
+        text='''Новый вид неядовитых змей обнаружили в Парагвае: он обитает на небольшой территории и уже 
+			находится на грани полного исчезновения. Словно бы желая «заклясть судьбу», ученые назвали змею 
+			в честь двух детей, чтобы напомнить и самим себе, и всему миру, что усилия по сохранению дикой 
+			природы Парагвая призваны дать потомкам возможность жить в лучшем мире.'''
+    )
+>>> Post.objects.create(
+        author=Author.objects.get(pk=1),
+        post_type=article,
+        headline='СОВЕРШЕНСТВОВАНИЕ СТРАТЕГИИ УПРАВЛЕНИЯ ПЕРСОНАЛОМ',
+        text='''Стратегическое управление - это управление организацией, опирающееся на человеческий потенциал
+		как основу организации, ориентирует производственную деятельность на запросы потребителей, гибко реагирует 
+		и проводит своевременные изменения в организации, отвечающие вызову со стороны окружения и позволяющие 
+		добиваться конкретных преимуществ, что в совокупности дает возможность организации выживать в долгосрочной 
+		перспективе, достигая своих целей.'''
+    )
+	
+5.	Присвоить им категории (как минимум в одной статье/новости должно быть не меньше 2 категорий)
+>>> from PortalApp.models import Post, Category, PostCategory
+>>> Post.objects.get(pk=1).category.set([(1), (2)])
+>>> Post.objects.get(pk=2).category.set([(2), (4)])
+>>> Post.objects.get(pk=3).category.set([(1), (3)])
+
+6.	Создать как минимум 4 комментария к разным объектам модели Post (в каждом объекте должен быть как минимум один комментарий).
+>>> from PortalApp.models import Comment, Post, User
+>>> Comment.objects.create(
+        post=Post.objects.get(pk=1),
+        user=User.objects.get(username='Vlad'),
+        text='Не люблю футбол',
+    )
+>>> Comment.objects.create(
+        post=Post.objects.get(pk=2),
+        user=User.objects.get(username='Semen'),
+        text='Обожаю змей',
+    )
+>>> Comment.objects.create(
+        post=Post.objects.get(pk=2),
+        user=User.objects.get(username='Vlad'),
+        text='А я не люблю змей',
+    )
+>>> Comment.objects.create(
+        post=Post.objects.get(pk=3),
+        user=User.objects.get(username='Vlad'),
+        text='Дичь, лучше почитаю про змей',
+    )
+	
+7.	Применяя функции like() и dislike() к статьям/новостям и комментариям, скорректировать рейтинги этих объектов.
+>>> from PortalApp.models import Comment, Post
+>>> Comment.like(Comment.objects.get(pk=1))
+>>> Comment.like(Comment.objects.get(pk=1))
+>>> Comment.like(Comment.objects.get(pk=2))
+>>> Comment.dislike(Comment.objects.get(pk=3))
+>>> Comment.dislike(Comment.objects.get(pk=4))
+>>> Comment.dislike(Comment.objects.get(pk=4))
+>>> Post.dislike(Post.objects.get(pk=1))       
+>>> Post.dislike(Post.objects.get(pk=1))
+>>> Post.like(Post.objects.get(pk=2))    
+>>> Post.like(Post.objects.get(pk=2))
+>>> Post.like(Post.objects.get(pk=3)) 
+
+8.	Обновить рейтинги пользователей.
+from PortalApp.models import Author
+Author.update_rating(Author.objects.get(pk=1))
+Author.update_rating(Author.objects.get(pk=2))

@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from PortalApp.models import *
-from django.contrib.auth.models import User
-
+from PortalApp.resources import news, article
+from django.db.models import Sum, Avg
 
 def index_page(request):
-    # Author.objects.create(user=User.objects.get(username='Vlad'))
-    # new = Author(user=User.objects.get(pk=4))
-    # new.save()
+
+    Author.update_rating(Author.objects.get(pk=1))
+
     return render(request, 'index.html')
