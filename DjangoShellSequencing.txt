@@ -55,13 +55,13 @@
 		перспективе, достигая своих целей.'''
     )
 	
-5.	Присвоить им категории (как минимум в одной статье/новости должно быть не меньше 2 категорий)
+5. Присвоить им категории (как минимум в одной статье/новости должно быть не меньше 2 категорий)
 >>> from PortalApp.models import Post, Category, PostCategory
 >>> Post.objects.get(pk=1).category.set([(1), (2)])
 >>> Post.objects.get(pk=2).category.set([(2), (4)])
 >>> Post.objects.get(pk=3).category.set([(1), (3)])
 
-6.	Создать как минимум 4 комментария к разным объектам модели Post (в каждом объекте должен быть как минимум один комментарий).
+6. Создать как минимум 4 комментария к разным объектам модели Post (в каждом объекте должен быть как минимум один комментарий).
 >>> from PortalApp.models import Comment, Post, User
 >>> Comment.objects.create(
         post=Post.objects.get(pk=1),
@@ -84,7 +84,7 @@
         text='Дичь, лучше почитаю про змей',
     )
 	
-7.	Применяя функции like() и dislike() к статьям/новостям и комментариям, скорректировать рейтинги этих объектов.
+7. Применяя функции like() и dislike() к статьям/новостям и комментариям, скорректировать рейтинги этих объектов.
 >>> from PortalApp.models import Comment, Post
 >>> Comment.like(Comment.objects.get(pk=1))
 >>> Comment.like(Comment.objects.get(pk=1))
@@ -98,7 +98,29 @@
 >>> Post.like(Post.objects.get(pk=2))
 >>> Post.like(Post.objects.get(pk=3)) 
 
-8.	Обновить рейтинги пользователей.
-from PortalApp.models import Author
-Author.update_rating(Author.objects.get(pk=1))
-Author.update_rating(Author.objects.get(pk=2))
+8. Обновить рейтинги пользователей.
+>>> from PortalApp.models import Author
+>>> Author.update_rating(Author.objects.get(pk=1))
+>>> Author.update_rating(Author.objects.get(pk=2))
+
+9. Вывести username и рейтинг лучшего пользователя (применяя сортировку и возвращая поля первого объекта).
+	1 способ:
+>>> from PortalApp.models import Author
+>>> from PortalApp.models import Author
+>>> Author.objects.all().order_by('-rating').values('user', 'rating')[0]
+	2 способ:
+>>> from PortalApp.models import Author
+>>> from django.db.models import Max           
+>>> rating = Author.objects.aggregate(Max("rating"))['rating__max']
+>>> name = Author.objects.get(rating=rating).user
+>>> rating, name
+
+10. Вывести дату добавления, username автора, рейтинг, заголовок и превью лучшей статьи, основываясь на лайках/дислайках к этой статье.
+>>> from PortalApp.models import Post
+>>> top_post = Post.objects.order_by('-rating').first()
+>>> top_post.date_time, top_post.author.user, top_post.rating, top_post.headline, Post.preview(top_post)
+
+11. Вывести все комментарии (дата, пользователь, рейтинг, текст) к этой статье.
+>>> from PortalApp.models import Post, Comment
+>>> top_post_pk = Post.objects.order_by('-rating').first().pk
+>>> Comment.objects.filter(post=top_post_pk).values('date_time', 'user', 'rating', 'text')
