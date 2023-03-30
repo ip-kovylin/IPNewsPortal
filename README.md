@@ -1,6 +1,6 @@
 To start the project: 
 *for Windows
-1. Select a folder you need to clone the project -> right mouse button -> Git Bash Here (Git should be installed)
+1. Select a folder you need to clone the project and get in -> empty space right mouse button -> Git Bash Here (Git must be installed)
 2. Enter:
 git clone https://github.com/ip-kovylin/IPNewsPortal
 3. Open project in PyCharm then open its terminal
