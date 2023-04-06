@@ -1,10 +1,30 @@
 {% extends 'flatpages/default.html' %}
 
 {% block title %}
-News
+All news
 {% endblock title %}
 
 {% block content %}
 <h1>Все новости</h1>
-{{ all_news }}
+<h3>Публикаций: {{ all_news|length }}</h3>
+<h3> {{ breaking_news|default_if_none:"Срочных новостей пока что нет" }} </h3>
+{% if all_news %}
+    <table border="1" width="1300" style="border-collapse:collapse;">
+        <tr>
+            <td>Тема</td>
+            <td>Дата, время</td>
+            <td>Превью</td>
+        </tr>
+        {% for all_news in all_news %}
+        <tr>
+            <td><a href="http://127.0.0.1:8000/news/{{ all_news.pk }}">{{ all_news.headline }}</a></td>
+            <td>{{ all_news.date_time|date:"d.m.Y" }}, {{ all_news.date_time|time:"H:i" }}</td>
+            <td>{{ all_news.text|truncatechars:20 }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+<h5>Сегодня {{ time_now|date:'d M Y' }}</h5>
+{% else %}
+    <h2>Новостей нет</h2>
+{% endif%}
 {% endblock content %}
