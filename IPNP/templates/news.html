@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 {% extends 'flatpages/default.html' %}
+{% load custom_filters %}
 
 {% block title %}
 News №{{ news_post.id }}
 {% endblock title %}
 
 {% block content %}
-<h1> {{ news_post.headline }} </h1>
+<h1> {{ news_post.headline|censor }} </h1>
 {% if news_post %}
     <table border="1" width="1300" style="border-collapse:collapse;" align="center">
         <tr>
             <td>
                 Дата публикации: {{ news_post.date_time|date:"d.m.Y" }}
                 <hr>
-                {{ news_post.text }}
+                {{ news_post.text|censor }}
             </td>
         </tr>
     </table>

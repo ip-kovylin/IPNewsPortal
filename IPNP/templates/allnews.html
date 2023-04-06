@@ -1,4 +1,6 @@
 {% extends 'flatpages/default.html' %}
+{% load custom_filters %}
+{% load custom_tags %}
 
 {% block title %}
 All news
@@ -17,13 +19,13 @@ All news
         </tr>
         {% for all_news in all_news %}
         <tr>
-            <td><a href="http://127.0.0.1:8000/news/{{ all_news.pk }}">{{ all_news.headline }}</a></td>
+            <td><a href="http://127.0.0.1:8000/news/{{ all_news.pk }}">{{ all_news.headline|censor }}</a></td>
             <td>{{ all_news.date_time|date:"d.m.Y" }}, {{ all_news.date_time|time:"H:i" }}</td>
-            <td>{{ all_news.text|truncatechars:20 }}</td>
+            <td>{{ all_news.text|truncatechars:20|censor }}</td>
         </tr>
         {% endfor %}
     </table>
-<h5>Сегодня {{ time_now|date:'d M Y' }}</h5>
+<h5>Сегодня {% current_time '%d %b %Y' %}</h5>
 {% else %}
     <h2>Новостей нет</h2>
 {% endif%}
