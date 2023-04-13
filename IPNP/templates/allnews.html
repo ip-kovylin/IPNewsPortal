@@ -22,12 +22,16 @@ All news
             <td>Тема</td>
             <td>Дата, время</td>
             <td>Превью</td>
+            <td>Редактирование</td>
+            <td>Удаление</td>
         </tr>
         {% for all_news in all_news %}
         <tr>
             <td><a href="http://127.0.0.1:8000/news/{{ all_news.pk }}">{{ all_news.headline|censor }}</a></td>
             <td>{{ all_news.date_time|date:"d.m.Y" }}, {{ all_news.date_time|time:"H:i" }}</td>
             <td>{{ all_news.text|truncatechars:20|censor }}</td>
+            <td><a href="http://127.0.0.1:8000/news/{{ all_news.pk }}/update/">Редактировать</a></td>
+            <td><a href="http://127.0.0.1:8000/news/{{ all_news.pk }}/delete/">Удалить</a></td>
         </tr>
         {% endfor %}
     </table>

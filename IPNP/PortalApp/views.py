@@ -1,10 +1,10 @@
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from PortalApp.models import Post
 from datetime import datetime
 from .filters import PostFilter
 from .forms import PostForm
-from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
 
 
 def index_page(request):
@@ -40,13 +40,19 @@ class News(DetailView):
     pk_url_kwarg = 'id'
 
 
-def create_post(request):
-    form = PostForm()
+class PostCreate(CreateView):
+    form_class = PostForm
+    model = Post
+    template_name = 'post_edit.html'
 
-    if request.method == "POST":
-        form = PostForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('http://127.0.0.1:8000/news/')
 
-    return render(request, 'post_edit.html', {'form': form})
+class PostUpdate(UpdateView):
+    form_class = PostForm
+    model = Post
+    template_name = 'post_edit.html'
+
+
+class PostDelete(DeleteView):
+    model = Post
+    template_name = 'post_delete.html'
+    success_url = reverse_lazy('all_posts')
