@@ -3,6 +3,8 @@ from django.views.generic import ListView, DetailView
 from PortalApp.models import Post
 from datetime import datetime
 from .filters import PostFilter
+from .forms import PostForm
+from django.http import HttpResponseRedirect
 
 
 def index_page(request):
@@ -14,7 +16,7 @@ class AllNews(ListView):
     ordering = '-date_time'
     template_name = 'allnews.html'
     context_object_name = 'all_news'    #обращение
-    paginate_by = 5
+    paginate_by = 10
 
 
     def get_queryset(self):
@@ -36,3 +38,15 @@ class News(DetailView):
     template_name = 'news.html'
     context_object_name = 'news_post'        #обращение
     pk_url_kwarg = 'id'
+
+
+def create_post(request):
+    form = PostForm()
+
+    if request.method == "POST":
+        form = PostForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('http://127.0.0.1:8000/news/')
+
+    return render(request, 'post_edit.html', {'form': form})
