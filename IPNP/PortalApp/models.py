@@ -28,7 +28,7 @@ class Category(models.Model):
     category_name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
-        return f'category_name: {self.category_name}'
+        return self.category_name
 
 
 class Post(models.Model):
@@ -52,14 +52,15 @@ class Post(models.Model):
         return f'{self.text[:124]}...'
 
     def __str__(self):
-        return f'''author: {self.author}, post_type: {self.post_type}', date_time: {self.date_time}'
-        , category: {self.category}', headline: {self.headline}', text: {self.text}'
-        , rating: {self.rating}'''
+        return f'''{self.headline}, {self.author}, date_time: {self.date_time}', rating: {self.rating}'''
 
 
 class PostCategory(models.Model):
     through_post = models.ForeignKey('Post', on_delete=models.CASCADE)
     through_category = models.ForeignKey('Category', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f'Дата: {self.through_post.date_time}, Заголовок: {self.through_post.headline}, Категория: {self.through_category}'
 
 
 class Comment(models.Model):

@@ -2,6 +2,6 @@ news = 'NEWS'
 article = 'ARTC'
 
 PostType = [
-    (news, 'Новости'),
+    (news, 'Новость'),
     (article, 'Статья'),
 ]
