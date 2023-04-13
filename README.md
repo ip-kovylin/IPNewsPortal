@@ -8,6 +8,7 @@ git clone https://github.com/ip-kovylin/IPNewsPortal
 python -m venv venv  
 venv\scripts\activate  
 pip install django  
+python -m pip install django-filter==21.1
 cd IPNP  
 python manage.py runserver  
 5. Congrats, you started development server at http://127.0.0.1:8000/
