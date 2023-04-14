@@ -33,6 +33,24 @@ class AllNews(ListView):
         return context
 
 
+class SearchPost(ListView):
+    model = Post
+    ordering = '-date_time'
+    template_name = 'search.html'
+    context_object_name = 'search_post'    #обращение
+    paginate_by = 10
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        self.filterset = PostFilter(self.request.GET, queryset)
+        return self.filterset.qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['filterset'] = self.filterset
+        return context
+
+
 class News(DetailView):
     model = Post
     template_name = 'news.html'

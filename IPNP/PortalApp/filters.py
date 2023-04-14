@@ -1,5 +1,7 @@
-from django_filters import FilterSet, ModelChoiceFilter, ModelMultipleChoiceFilter
-from .models import Post, Category
+import django_filters
+from django_filters import FilterSet, ModelMultipleChoiceFilter, DateFilter
+from .models import Post, Category, Author
+from .forms import *
 
 
 class PostFilter(FilterSet):
@@ -10,6 +12,18 @@ class PostFilter(FilterSet):
         conjoined=True,
     )
 
+    author = ModelMultipleChoiceFilter(
+        field_name='author',
+        queryset=Author.objects.all(),
+        label='Author',
+    )
+
+    date_time = DateFilter(
+        field_name='date_time',
+        widget=forms.DateInput(attrs={'type': 'date'}),
+        label='Post later',
+        lookup_expr='date__gte'
+    )
 
     class Meta:
         model = Post
@@ -18,8 +32,4 @@ class PostFilter(FilterSet):
             'post_type': ['exact'],
             # поиск по названию
             'headline': ['icontains'],
-            'rating': [
-                'lt',
-                'gt',
-            ],
         }

@@ -7,11 +7,17 @@ All news
 {% endblock title %}
 
 {% block content %}
+
 <h1>Все новости</h1>
+<h3>Публикаций: {{ search_post|length }}</h3>
 <h3> {{ breaking_news|default_if_none:"Срочных новостей пока что нет" }} </h3>
+    <form action="" method="get">
+           {{ filterset.form.as_p }}
+           <input type="submit" value="Найти" />
+     </form>
 
 <hr>
-{% if all_news %}
+{% if search_post %}
     <table border="1" width="1300" style="border-collapse:collapse;">
         <tr>
             <td>Тема</td>
@@ -20,13 +26,13 @@ All news
             <td>Редактирование</td>
             <td>Удаление</td>
         </tr>
-        {% for all_news in all_news %}
+        {% for search_post in search_post %}
         <tr>
-            <td><a href="http://127.0.0.1:8000/news/{{ all_news.pk }}">{{ all_news.headline|censor }}</a></td>
-            <td>{{ all_news.date_time|date:"d.m.Y" }}, {{ all_news.date_time|time:"H:i" }}</td>
-            <td>{{ all_news.text|truncatechars:20|censor }}</td>
-            <td><a href="http://127.0.0.1:8000/news/{{ all_news.pk }}/update/">Редактировать</a></td>
-            <td><a href="http://127.0.0.1:8000/news/{{ all_news.pk }}/delete/">Удалить</a></td>
+            <td><a href="http://127.0.0.1:8000/news/{{ search_post.pk }}">{{ search_post.headline|censor }}</a></td>
+            <td>{{ search_post.date_time|date:"d.m.Y" }}, {{ search_post.date_time|time:"H:i" }}</td>
+            <td>{{ search_post.text|truncatechars:20|censor }}</td>
+            <td><a href="http://127.0.0.1:8000/news/{{ search_post.pk }}/update/">Редактировать</a></td>
+            <td><a href="http://127.0.0.1:8000/news/{{ search_post.pk }}/delete/">Удалить</a></td>
         </tr>
         {% endfor %}
     </table>
@@ -35,9 +41,7 @@ All news
 <h2>Новостей нет</h2>
 {% endif%}
 
-{# Информация о предыдущих страницах #}
 {% if page_obj.has_previous %}
-    {# Для каждой ссылки пагинации указываем обработку через новый тег #}
     <a href="?{% url_replace page=1 %}">1</a>
     {% if page_obj.previous_page_number != 1 %}
         ...
@@ -45,10 +49,8 @@ All news
     {% endif %}
 {% endif %}
 
-{# Информация о текущей странице #}
 {{ page_obj.number }}
 
-{# Информация о следующих страницах #}
 {% if page_obj.has_next %}
     <a href="?{% url_replace page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a>
     {% if paginator.num_pages != page_obj.next_page_number %}
