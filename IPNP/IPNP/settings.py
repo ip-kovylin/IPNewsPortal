@@ -58,6 +58,8 @@ MIDDLEWARE = [
 
 SITE_ID = 1
 
+LOGIN_URL = 'http://127.0.0.1:8000/admin/'
+
 ROOT_URLCONF = 'IPNP.urls'
 
 TEMPLATES = [
