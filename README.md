@@ -9,6 +9,7 @@ python -m venv venv
 venv\scripts\activate  
 pip install django  
 python -m pip install django-filter==21.1
+pip install django-allauth
 cd IPNP  
 python manage.py runserver  
 5. Congrats, you started development server at http://127.0.0.1:8000/
