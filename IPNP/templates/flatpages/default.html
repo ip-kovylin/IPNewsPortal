@@ -25,6 +25,9 @@
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="http://127.0.0.1:8000/news">Все новости</a></li>
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="http://127.0.0.1:8000/news/create">Новый пост</a></li>
                         <li class="nav-item"><a class="nav-link active" aria-current="page" href="http://127.0.0.1:8000/news/search">Поиск</a></li>
+                        {% if not request.user.is_authenticated %} <li class="nav-item"><a class="nav-link active" aria-current="page" href="http://127.0.0.1:8000/accounts/login/">Войти в аккаунт</a></li>
+                        {% else %} <li class="nav-item"><a class="nav-link active" aria-current="page" href="http://127.0.0.1:8000/accounts/logout/">Выйти из аккаунта</a></li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
