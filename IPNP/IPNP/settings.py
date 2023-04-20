@@ -65,7 +65,7 @@ MIDDLEWARE = [
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = 'http://127.0.0.1:8000/news/'
 SITE_ID = 1
-
+ACCOUNT_FORMS = {'signup': 'PortalApp.forms.BasicSignupForm'}
 
 ROOT_URLCONF = 'IPNP.urls'
 
