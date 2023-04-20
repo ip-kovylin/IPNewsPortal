@@ -19,7 +19,8 @@ from PortalApp.views import index_page
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', index_page),
+    path('', include('protect.urls')),
     path('news/', include('PortalApp.urls')),
-    path('accounts/', include('allauth.urls'))
+    path('accounts/', include('allauth.urls')),
+    path('sign/', include('sign.urls')),
 ]
