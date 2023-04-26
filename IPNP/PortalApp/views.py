@@ -1,12 +1,13 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
-from PortalApp.models import Post
+from PortalApp.models import Post, Category
 from datetime import datetime
 from .filters import PostFilter
 from .forms import PostForm
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 
@@ -91,6 +92,28 @@ class IndexView(LoginRequiredMixin, TemplateView):
         return context
 
 
+class CategoriesList(ListView):
+    model = Category
+    queryset = Category.objects.all()
+    ordering = 'category_name'
+    template_name = 'categories.html'
+    context_object_name = 'categories'
+
+
+class CategoryDetail(DetailView):
+    model = Category
+    template_name = 'one_category.html'
+    context_object_name = 'one_category'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        category = Category.objects.get(pk=self.kwargs['pk'])
+        context['cat'] = category
+        context['subscribers'] = category.subscribers.all()
+        return context
+
+
+
 @login_required
 def upgrade_me(request):
     user = request.user
@@ -98,3 +121,17 @@ def upgrade_me(request):
     if not request.user.groups.filter(name='author').exists():
         author_group.user_set.add(user)
     return redirect('/')
+
+
+@login_required
+def subscribe(request, pk):
+    category = Category.objects.get(pk=pk)
+    category.subscribers.add(request.user.id)
+    return HttpResponseRedirect('http://127.0.0.1:8000/news/categories')
+
+
+@login_required
+def unsubscribe(request, pk):
+    category = Category.objects.get(pk=pk)
+    category.subscribers.remove(request.user.id)
+    return HttpResponseRedirect('http://127.0.0.1:8000/news/categories')
