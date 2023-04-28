@@ -2,6 +2,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, Group
 from django.shortcuts import redirect
 from django.views.generic.edit import CreateView
+
+from PortalApp.models import Author
 from .models import BaseRegisterForm
 
 
@@ -16,6 +18,7 @@ def upgrade_me(request):
     premium_group = Group.objects.get(name='authors')
     if not request.user.groups.filter(name='authors').exists():
         premium_group.user_set.add(user)
+        Author.objects.create(user_id=request.user.pk)
     return redirect('/')
 
 @login_required
