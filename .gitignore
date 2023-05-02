@@ -9,6 +9,10 @@ __pycache__/
 venv/
 ENV/
 
+.env
+
 .idea
 
 MyNotes.txt
+!/IPNP/.env
+/IPNP/.env
