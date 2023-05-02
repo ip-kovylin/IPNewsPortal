@@ -50,12 +50,12 @@ INSTALLED_APPS = [
 
     'sign',
     'protect',
+    'django_apscheduler',
 
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
-    'allauth.socialaccount.providers.yandex',
 ]
 
 MIDDLEWARE = [
@@ -72,7 +72,6 @@ MIDDLEWARE = [
 LOGIN_URL = 'http://127.0.0.1:8000/sign/login/'
 LOGIN_REDIRECT_URL = 'http://127.0.0.1:8000/news/'
 SITE_ID = 1
-ACCOUNT_FORMS = {'signup': 'PortalApp.forms.BasicSignupForm'}
 
 ROOT_URLCONF = 'IPNP.urls'
 
@@ -100,11 +99,22 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+
+
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_FORMS = {'signup': 'PortalApp.forms.BasicSignupForm'}
+ADMINS = [('admin', 'Vlad')]
+SERVER_EMAIL = 'ipnewstest@yandex.ru'
 
 
 EMAIL_HOST = 'smtp.yandex.ru'
@@ -119,16 +129,10 @@ SITE_URL = 'http://127.0.0.1:8000'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -171,3 +175,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
+
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+
+APSCHEDULER_RUN_NOW_TIMEOUT = 25
