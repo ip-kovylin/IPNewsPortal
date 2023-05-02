@@ -16,6 +16,8 @@ python -m pip install django-filter==21.1
 
 pip install python-dotenv
 
+pip install django-apscheduler
+
 pip install django-allauth
 
 cd IPNP  
