@@ -22,7 +22,7 @@ class Author(models.Model):
         self.save()
 
     def __str__(self):
-        return f'{self.user}, rating: {self.rating}'
+        return f'{self.user}'
 
 
 class Category(models.Model):
