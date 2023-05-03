@@ -1,8 +1,10 @@
+import datetime
+
 from django.core.mail import EmailMultiAlternatives
-from django.db.models.signals import m2m_changed
+from django.db.models.signals import m2m_changed, pre_save
 from django.dispatch import receiver
 from django.template.loader import render_to_string
-from .models import PostCategory
+from .models import PostCategory, Post, Author
 from IPNP import settings
 
 
@@ -37,3 +39,12 @@ def notify_about_new_post(sender, instance, **kwargs):
             subscribers_emails += [s.email for s in subscribers]
 
         send_notifications(instance.preview(), instance.pk, instance.headline, subscribers_emails)
+
+
+@receiver(pre_save, sender=Post)
+def check_for_saves(sender, instance, **kwargs):
+    current_author = instance.author_id
+    last_day = date_time=datetime.datetime.now()-datetime.timedelta(hours=24)
+    posts = Post.objects.filter(author=Author.objects.get(id=current_author), date_time__gte=last_day)
+    if len(posts) > 2:
+        raise Exception("Извините, вы не можете публиковать более 3 постов в день.")
