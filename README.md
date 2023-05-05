@@ -20,6 +20,10 @@ pip install django-apscheduler
 
 pip install django-allauth
 
+pip install celery
+
+pip install redis
+
 cd IPNP  
 
 python manage.py runserver  
