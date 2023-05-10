@@ -1,15 +1,24 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.core.mail import send_mail
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
+from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from PortalApp.models import Post, Category
-from datetime import datetime
+from datetime import datetime, timedelta
 from .filters import PostFilter
 from .forms import PostForm
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from .tasks import hello, printer
+
+
+class IndexViews(View):
+    def get(self, request):
+        printer.apply_async([10], countdown = 5)
+        hello.delay()
+        return HttpResponse('Hello!')
 
 
 def index_page(request):

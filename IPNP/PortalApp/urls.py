@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import AllNews, News, PostCreate, PostUpdate, PostDelete, SearchPost, upgrade_me, CategoriesList, \
-    CategoryDetail, subscribe, unsubscribe
+    CategoryDetail, subscribe, unsubscribe, IndexViews
 
 urlpatterns = [
     path('', AllNews.as_view(), name='all_posts'),
