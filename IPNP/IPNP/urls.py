@@ -15,7 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from PortalApp.views import index_page
+
+from PortalApp.views import IndexViews
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -23,4 +24,5 @@ urlpatterns = [
     path('news/', include('PortalApp.urls')),
     path('accounts/', include('allauth.urls')),
     path('sign/', include('sign.urls')),
+    path('index_view/', IndexViews.as_view())
 ]
