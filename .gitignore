@@ -16,3 +16,6 @@ ENV/
 MyNotes.txt
 !/IPNP/.env
 /IPNP/.env
+celerybeat-schedule.bak
+celerybeat-schedule.dat
+celerybeat-schedule.dir

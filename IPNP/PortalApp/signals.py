@@ -48,4 +48,3 @@ def check_for_saves(sender, instance, **kwargs):
     posts = Post.objects.filter(author=Author.objects.get(id=current_author), date_time__gte=last_day)
     if len(posts) > 2:
         raise Exception("Извините, вы не можете публиковать более 3 постов в день.")
- 

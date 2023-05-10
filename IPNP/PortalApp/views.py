@@ -6,17 +6,17 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from PortalApp.models import Post, Category
-from datetime import datetime, timedelta
+from datetime import datetime
 from .filters import PostFilter
 from .forms import PostForm
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from .tasks import hello, printer
+from .tasks import hello, printer, send_email_task
 
 
 class IndexViews(View):
     def get(self, request):
-        printer.apply_async([10], countdown = 5)
+        printer.delay(10)
         hello.delay()
         return HttpResponse('Hello!')
 
@@ -77,6 +77,12 @@ class PostCreate(PermissionRequiredMixin, CreateView):
     form_class = PostForm
     model = Post
     template_name = 'post_create.html'
+
+    def form_valid(self, form):
+        post = form.save(commit=False)
+        post.save()
+        send_email_task.delay(post.pk)
+        return super().form_valid(form)
 
 
 class PostUpdate(PermissionRequiredMixin, UpdateView):
